@@ -111,7 +111,7 @@ function addForwarding({ hostPort, remoteIp, remotePort }) {
         remotePort
       })
       saveProcesses()
-      process.kill();
+      process.exit();
     }
   }, 100)
 
@@ -137,7 +137,7 @@ function removeForwarding(pidToTerminate) {
     const forwardIndex = forwards.findIndex((forward => forward.pid === pidToTerminate))
     forwards.splice(forwardIndex, 1)
     saveProcesses()
-    process.kill();
+    process.exit();
   }
 }
 function listForwarding() {
