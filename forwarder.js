@@ -92,23 +92,7 @@ function askRemoveForwarding() {
         choices: forwards.map(({ pid, hostPort, remoteIp, remotePort }) => ({ name: `[${pid}] ${hostPort} => ${remoteIp}:${remotePort}`, value: pid }))
       }
     ]).then(({ pidToTerminate }) => {
-      try {
-        process.kill(pidToTerminate)
-        console.log("Successfully terminated forwarding");
-      } catch (error) {
-        switch (error.errno) {
-          case "ESRCH":
-            console.log("Error, could not find process with pid " + pidToTerminate);
-            break;
-          default:
-            console.log("Error: " + error.errno);
-            break;
-        }
-      } finally {
-        const forwardIndex = forwards.findIndex((forward => forward.pid === pidToTerminate))
-        forwards.splice(forwardIndex, 1)
-        saveProcesses()
-      }
+      removeForwarding(pidToTerminate)
     })
 }
 function askListForwarding() {
@@ -127,6 +111,7 @@ function addForwarding({ hostPort, remoteIp, remotePort }) {
         remotePort
       })
       saveProcesses()
+      process.kill();
     }
   }, 100)
 
@@ -135,8 +120,25 @@ function addForwarding({ hostPort, remoteIp, remotePort }) {
     console.error(`[Error]: ${data}`);
   });
 }
-function removeForwarding() {
-
+function removeForwarding(pidToTerminate) {
+  try {
+    process.kill(pidToTerminate)
+    console.log("Successfully terminated forwarding");
+  } catch (error) {
+    switch (error.errno) {
+      case "ESRCH":
+        console.log("Error, could not find process with pid " + pidToTerminate);
+        break;
+      default:
+        console.log("Error: " + error.errno);
+        break;
+    }
+  } finally {
+    const forwardIndex = forwards.findIndex((forward => forward.pid === pidToTerminate))
+    forwards.splice(forwardIndex, 1)
+    saveProcesses()
+    process.kill();
+  }
 }
 function listForwarding() {
 
