@@ -117,17 +117,21 @@ function askListForwarding() {
 // Operations
 function addForwarding({ hostPort, remoteIp, remotePort }) {
   const newProcess = spawn("ssh", ["-L", `${hostPort}:${remoteIp}:${remotePort}`, "-N", remoteIp, "-N", "-o", "GatewayPorts=yes"], { "detached": true })
-  newProcess.stdout.on('data', () => {
-    forwards.push({
-      "pid": process.pid,
-      hostPort,
-      remoteIp,
-      remotePort
-    })
-    saveProcesses()
-  });
+  let failed = false;
+  setTimeout(() => {
+    if (!failed) {
+      forwards.push({
+        "pid": newProcess.pid,
+        hostPort,
+        remoteIp,
+        remotePort
+      })
+      saveProcesses()
+    }
+  }, 100)
 
-  process.stderr.on('data', (data) => {
+  newProcess.stderr.on('data', (data) => {
+    failed = true;
     console.error(`[Error]: ${data}`);
   });
 }
