@@ -212,7 +212,7 @@ function removeForwarding (pidToTerminate) {
 function getProcessUsingPorts (port) {
   // netstat -ntlp
   const netstatProc = spawn('netstat', ['-ntlp'])
-  const regex = new RegExp(`0.0.0.0:${port}.*\\s(\\S+)`)
+  const regex = new RegExp(`0.0.0.0:${port}\\s.*\\s(\\S+)`) // Matching '0.0.0.0<port> <something (greedy)> <MATCHING GROUP: non-space characters><any or no space characters>'
   return new Promise((resolve) => {
     netstatProc.stdout.on('data', (data) => {
       // Finding first process listening on given port
