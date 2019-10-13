@@ -115,7 +115,7 @@ function askRemoveForwarding () {
       {
         type: 'list',
         name: 'pidToTerminate',
-        message: 'Which forward to terminate?',
+        message: 'Which port forwarding to terminate?',
         choices: [
           { name: 'Cancel and exit', value: -1 },
           ...forwards.map(({ pid, hostPort, remoteIp, remotePort }) => ({ name: `[${pid}] ${hostPort} => ${remoteIp}:${remotePort}`, value: pid }))
