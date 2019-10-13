@@ -61,10 +61,10 @@ function askAddForwarding () {
   inquirer
     .prompt([
       {
-        type: 'number',
+        type: 'input',
         name: 'hostPort',
         message: 'Host port?',
-        validate: validatePort
+        validate: (hostPort) => validatePort(hostPort)
       },
       {
         type: 'input',
@@ -72,10 +72,10 @@ function askAddForwarding () {
         message: 'remote IP?'
       },
       {
-        type: 'number',
+        type: 'input',
         name: 'remotePort',
         message: 'remote port?',
-        validate: (port) => validatePort(port, false)
+        validate: (remotePort) => validatePort(remotePort, false)
       }
     ]).then(addForwarding)
 }
@@ -90,7 +90,7 @@ async function validatePort (port, checkAvailability = true) {
   // Checking validity
   if (port < 1 || port > 65535 || parseInt(port).toString() !== port) {
     // If port is not in valid range or is not a number
-    return Promise.resolve('Enter a valid port')
+    return Promise.resolve('Enter a valid port\n')
   }
 
   // Checking availability
