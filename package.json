@@ -4,7 +4,8 @@
   "description": "",
   "main": "forwarder.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "lint": "standard"
   },
   "keywords": [],
   "author": "",
@@ -14,5 +15,8 @@
   },
   "bin": {
     "forwarder": "./forwarder.js"
+  },
+  "devDependencies": {
+    "standard": "^14.3.1"
   }
 }
