@@ -216,7 +216,11 @@ function getProcessUsingPorts (port) {
   return new Promise((resolve) => {
     netstatProc.stdout.on('data', (data) => {
       // Finding first process listening on given port
-      const processUsingPort = data.toString().split('\n').find(line => line.match(regex))
+      const processUsingPort = data.toString() // Fetching the output as string
+        .split('\n') // Splitting by line
+        .map(line => line.match(regex)) // Matching each line with regex
+        .find(result => result) // Filtering all unmatching results (filtering all 'null')
+
       if (processUsingPort) {
         // Returning process "PID/Program name" if found
         resolve(processUsingPort[1])
